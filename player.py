@@ -23,3 +23,28 @@ class Player(CircleShape):
     
     def draw(self, screen):
         pygame.draw.polygon(screen, "white", self.triangle(), 2)
+
+    def rotate(self, delta_time):
+        self.rotation += delta_time * PLAYER_TURN_SPEED
+
+    def move(self, delta_time):
+        # We start with a unit vector pointing straight up from (0, 0) to (0, 1).
+        # We rotate that vector by the player's rotation, so it's pointing in the direction the player is facing.
+        # We multiply by PLAYER_SPEED * dt. A larger vector means faster movement.
+        # Add the vector to our position to move the player.
+
+        forward = pygame.Vector2(0, 1).rotate(self.rotation)
+        self.position += forward * PLAYER_SPEED * delta_time
+
+    def update(self, dt):
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_a]:
+            self.rotate(-dt)
+        if keys[pygame.K_d]:
+            self.rotate(dt)
+        if keys[pygame.K_w]:
+            self.move(dt)
+        if keys[pygame.K_s]:
+            self.move(-dt)
+             
